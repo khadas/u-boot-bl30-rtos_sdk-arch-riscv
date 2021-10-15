@@ -1,0 +1,8 @@
+menu "RISCV Options"
+
+config RISCV
+	bool
+	help
+	  RISC-V architecture
+
+endmenu
