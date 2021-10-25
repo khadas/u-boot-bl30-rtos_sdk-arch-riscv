@@ -2,7 +2,7 @@ aml_add_library()
 
 aml_library_include_directories(
 	${CMAKE_SOURCE_DIR}
-	${SDK_BASE}/include
+	${SDK_BASE}/drivers/${ARCH}/common
 	${SDK_BASE}/soc/${ARCH}
 	${SDK_BASE}/soc/${ARCH}/${CONFIG_SOC_NAME}
 	${SDK_BASE}/boards/${ARCH}/${BOARD}

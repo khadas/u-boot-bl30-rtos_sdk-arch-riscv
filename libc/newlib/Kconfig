@@ -1,3 +1,0 @@
-config LIBC_STD
-        bool "Libc implement by standard"
-
