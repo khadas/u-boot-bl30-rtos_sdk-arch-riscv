@@ -1,11 +1,10 @@
 set(common_flags "")
-
 set(c_flags "")
 
 set(linker_flags "-Wl,--print-memory-usage,-Map=${TARGET_NAME}.map,--gc-sections")
 
 if(CONFIG_LIBC_STD)
-set(linker_flags "${linker_flags},--wrap=_malloc_r,--wrap=_free_r,--wrap=_realloc_r")
+set(linker_flags "${linker_flags},--wrap=_malloc_r,--wrap=_free_r,--wrap=_realloc_r,--wrap=_calloc_r")
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=rv32imc -mabi=ilp32 -DN200_REVA=1 -D__ASM -DSOC_${SOC} -imacros${AUTOCONF_H}")
