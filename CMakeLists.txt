@@ -13,6 +13,7 @@ aml_library_sources(
 	interrupt_control.c
 )
 
+aml_library_link_libraries(soc__${ARCH})
 aml_library_link_libraries(kernel__${KERNEL})
 
 aml_link_libraries()

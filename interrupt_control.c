@@ -1,10 +1,9 @@
 // See LICENSE for license details.
 #include <stdio.h>
-#include "common.h"
-#include "riscv_encoding.h"
+#include <FreeRTOS.h>
 #include "interrupt_control.h"
+#include "common.h"
 #include "register.h"
-#include "FreeRTOS.h"
 
 void pic_set_threshold(uint32_t threshold)
 {
