@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #ifndef INTERRUPT_CONTROL_H_
 #define INTERRUPT_CONTROL_H_
 

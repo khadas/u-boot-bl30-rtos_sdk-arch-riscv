@@ -1,4 +1,9 @@
-//See LICENSE for license details.
+/*
+ * Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <stdint.h>
 #include <stdio.h>
 #include <unistd.h>
