@@ -42,7 +42,7 @@ __attribute__((weak)) uintptr_t handle_trap(uintptr_t mcause, uintptr_t sp)
 }
 
 
-#ifdef N200_REVA
+#ifdef CONFIG_N200_REVA
 /*Entry Point for PIC Interrupt Handler*/
 __attribute__((weak)) uint32_t handle_irq(uint32_t int_num);
 

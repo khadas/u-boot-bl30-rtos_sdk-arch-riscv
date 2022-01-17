@@ -13,11 +13,9 @@ aml_library_sources(
 	start.S
 	vtable.S
 	handlers.c
-	n200_func.c
 	interrupt_control.c
 )
 
-aml_library_link_libraries(soc__${ARCH})
 aml_library_link_libraries(kernel__${KERNEL})
 
 aml_link_libraries()

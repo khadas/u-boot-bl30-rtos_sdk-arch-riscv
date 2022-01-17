@@ -9,7 +9,7 @@
 	.type _start,@function
 _start:
 	csrc CSR_MSTATUS, MSTATUS_MIE
-#ifndef N200_REVA
+#ifndef CONFIG_N200_REVA
 	/* Set the the NMI base to share with mtvec by setting CSR_MMISC_CTL */
 	li t0, (0x1 << 9);
 	csrs CSR_MMISC_CTL, t0
@@ -104,7 +104,7 @@ _data_img:
 .long _data_img_start
 #endif
 
-#ifndef N200_REVA
+#ifndef CONFIG_N200_REVA
 	.global disable_mcycle_minstret
 disable_mcycle_minstret:
         csrsi CSR_MCOUNTINHIBIT, 0x5
