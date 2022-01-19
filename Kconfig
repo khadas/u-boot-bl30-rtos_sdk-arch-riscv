@@ -6,6 +6,7 @@ menu "RISCV Options"
 
 config RISCV
 	bool
+	select KERNEL
 	help
 	  RISC-V architecture
 
