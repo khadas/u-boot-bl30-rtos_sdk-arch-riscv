@@ -2,6 +2,8 @@
 
 // See LICENSE for license details.
 
+#include "riscv_encoding.h"
+
 	.section .vtable
 
 	.weak  eclic_msip_handler

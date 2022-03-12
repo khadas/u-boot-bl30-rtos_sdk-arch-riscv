@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -g -ffunction-sections -fdata-sectio
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=rv32imc -mabi=ilp32 -nostdlib -imacros${AUTOCONF_H}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --specs=nano.specs --specs=nosys.specs")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -g -ffunction-sections -fdata-sections -fno-common -fno-builtin -fgnu89-inline")
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -march=rv32imc -mabi=ilp32 -imacros${AUTOCONF_H}")
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -march=rv32imc -mabi=ilp32 -D__ASM -imacros${AUTOCONF_H}")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} --specs=nano.specs --specs=nosys.specs")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -O2 -g -ffunction-sections -fdata-sections -fno-common -fgnu89-inline")
 
