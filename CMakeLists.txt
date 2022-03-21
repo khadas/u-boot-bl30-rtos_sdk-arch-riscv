@@ -5,8 +5,7 @@
 aml_add_library()
 
 aml_library_include_directories(
-	${CMAKE_SOURCE_DIR}
-	${SDK_BASE}/arch/${ARCH}
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 aml_library_sources(
