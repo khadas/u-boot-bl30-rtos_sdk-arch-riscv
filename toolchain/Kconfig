@@ -13,3 +13,10 @@ choice TOOLCHAIN
 	help
 	  "Select GCC toolchain"
 endchoice
+
+if TOOLCHAIN_GCC
+config LTO_OPTIMIZATION
+	bool "LTO flag"
+	help
+	  "Select The link-time optimizations flag"
+endif
