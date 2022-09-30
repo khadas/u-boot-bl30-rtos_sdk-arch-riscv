@@ -464,10 +464,23 @@ call_irq:
 	/* Bob: Interupt m-time interrupt */
     li t0, PIC_INT_TMR
 	beq a0,t0, MTIME_IRQ
+    li t0, PIC_INT_SFT
+	beq a0,t0, MSIP_IRQ
 
 	// a0 as the function argument
 	jal 	handle_irq
+	jal	COMPLETE
 
+/* Replace yield with generating soft interrupt pending instead
+ * of ECALL, which causing IRQ interrupted by task switch.
+ */
+MSIP_IRQ:
+	pushREGFILE_Callee
+	portSAVE_CONTEXT_IRQ
+
+	jal	vSoftIRQHandler
+
+COMPLETE:
 	//Complete the IRQ
 	// a0 as the return value
 	li t0, (PIC_CTRL_ADDR + PIC_CLAIM_OFFSET)
@@ -523,18 +536,20 @@ MTIME_HANDLER:
 
 	mret
 
-#if 0
+#if 1
 .align 2
 .globl MSIP_HANDLER
 MSIP_HANDLER:
 	pushREGFILE
+	portSAVE_EPC_MSTATUS
 	portSAVE_CONTEXT_IRQ
 
-	csrs CSR_MSTATUS, MSTATUS_MIE
-	jal 	test_handler
-	csrc CSR_MSTATUS, MSTATUS_MIE
+	//csrs CSR_MSTATUS, MSTATUS_MIE
+	jal 	vSoftIRQHandler
+	//csrc CSR_MSTATUS, MSTATUS_MIE
 
 	portRESTORE_CONTEXT_IRQ
+	portRESTORE_EPC_MSTATUS
 	popREGFILE
 
 	mret

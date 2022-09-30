@@ -102,8 +102,19 @@ extern void vPortClearInterruptMask( int uxSavedStatusValue ); //in port.c
 /* Scheduler utilities. */
 /* the return after the ECALL is VERY important */
 
-#define portYIELD() ECALL(PORT_YIELD);
+//#define portYIELD() ECALL(PORT_YIELD);
 
+/* Replace yield with generating soft interrupt pending instead
+ * of ECALL, which causing IRQ interrupted by task switch.
+ */
+#ifdef CONFIG_N200_REVA
+uint32_t vSoftIRQHandler(uint32_t int_num);
+#else
+void vSoftIRQHandler(void);
+#endif
+void vGenerateSoftIRQ(void);
+
+#define portYIELD() vGenerateSoftIRQ()
 #define portYIELD_FROM_ISR(x)  if(x!=0)  {portYIELD();}
 
 
