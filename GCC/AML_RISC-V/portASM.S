@@ -469,18 +469,7 @@ call_irq:
 
 	// a0 as the function argument
 	jal 	handle_irq
-	jal	COMPLETE
 
-/* Replace yield with generating soft interrupt pending instead
- * of ECALL, which causing IRQ interrupted by task switch.
- */
-MSIP_IRQ:
-	pushREGFILE_Callee
-	portSAVE_CONTEXT_IRQ
-
-	jal	vSoftIRQHandler
-
-COMPLETE:
 	//Complete the IRQ
 	// a0 as the return value
 	li t0, (PIC_CTRL_ADDR + PIC_CLAIM_OFFSET)
@@ -506,7 +495,18 @@ MTIME_IRQ:
 	//portSAVE_IPC
     // a0 as the function argument
 	jal		vPortSysTickHandler
+	jal		COMPLETE
 
+/* Replace yield with generating soft interrupt pending instead
+ * of ECALL, which causing IRQ interrupted by task switch.
+ */
+MSIP_IRQ:
+	pushREGFILE_Callee
+	portSAVE_CONTEXT_IRQ
+
+	jal	vSoftIRQHandler
+
+COMPLETE:
   //Complete the IRQ
   // a0 as the return value
   li t0, (PIC_CTRL_ADDR + PIC_CLAIM_OFFSET)
