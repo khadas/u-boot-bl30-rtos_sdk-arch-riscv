@@ -8,5 +8,3 @@ Content:
 - @subpage set_log_level
 - @subpage update_firmware
 - @subpage commands
-- @subpage wifi_onboarding
-- @subpage ble_fota

@@ -51,7 +51,7 @@ PROJECT_BRIEF          = "Development Guide for Amlogic RTOS SDK"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = $(SDK_BASE)/docs/images/logo.png
+PROJECT_LOGO           = $(SDK_BASE)/arch/riscv/docs/images/logo.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -697,7 +697,7 @@ FILE_VERSION_FILTER    =
 # DoxygenLayout.xml, doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
-LAYOUT_FILE            = $(SDK_BASE)/docs/layout.xml
+LAYOUT_FILE            = $(SDK_BASE)/arch/riscv/docs/layout.xml
 
 # The CITE_BIB_FILES tag can be used to specify one or more bib files containing
 # the reference definitions. This must be a list of .bib files. The .bib
@@ -784,7 +784,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT		= $(SDK_BASE)/arch/$(ARCH)/docs/ \
+INPUT		= $(SDK_BASE)/arch/riscv/docs/ \
 			$(SDK_BASE)/drivers_aocpu \
 
 # This tag can be used to specify the character encoding of the source files
@@ -921,7 +921,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = $(SDK_BASE)/arch/${ARCH}docs/images/ \
+IMAGE_PATH             = $(SDK_BASE)/arch/riscv/docs/images/ \
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
