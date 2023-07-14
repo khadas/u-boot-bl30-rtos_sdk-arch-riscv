@@ -12,4 +12,3 @@ Content:
 - @subpage add_static_library
 - @subpage add_driver
 - @subpage add_project
-- @subpage use_ulog

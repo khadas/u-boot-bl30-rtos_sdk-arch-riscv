@@ -12,10 +12,6 @@ Make directory ***libs/ulog***, and put your source code into it.
 Write ***Kconfig*** for your library.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
 config ULOG
     bool "Ulog"
     default n
@@ -35,10 +31,6 @@ source "libs/ulog/Kconfig"
 Write ***CMakeLists.txt*** for your library.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
 if(CONFIG_ULOG)
 
 aml_add_library()

@@ -22,5 +22,3 @@ If you want import shell functions at current shell environment, which could hel
 
 # function notes
 * **git command:** Used at the rtos sdk is a part of other project which managed by repo,we use the git command only on rtos sdk's repository.
-
-

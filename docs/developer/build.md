@@ -10,9 +10,9 @@ If you already know the these parameters, you could specify them by the command 
 
 	source scripts/env.sh [ARCH] [SOC] [BOARD] [PRODUCT]
 
-For ARCH *arm64*, SOC *a1*, BOARD *ad401_a113l*, PRODUCT *speaker*, you could type the following command.\n
+For ARCH *riscv*, SOC *a4*, BOARD *ba400_a113l2*, PRODUCT *aocpu*, you could type the following command.\n
 
-	source scripts/env.sh arm64 a1 ad401_a113l speaker
+	source scripts/env.sh riscv a4 ba400_a113l2 aocpu
 
 Otherwise, you could choose one project from the list.\n
 
@@ -27,8 +27,8 @@ To build a specific product for a specific board, use the following command:
 Note that the building environment will be extracted automatically for the first time running.\n
 After the compilation, the images can be found in the directory ***output/${ARCH}-${BOARD}-${PRODUCT}/images***.
 
-For ARCH *arm64*, SOC *a1*, BOARD *ad401_a113l*, PRODUCT *speaker*,
-the images can be found in the directory ***output/arm64-ad401_a113l-speaker/images***.
+For ARCH *riscv*, SOC *a4*, BOARD *ba400_a113l2*, PRODUCT *aocpu*,
+the images can be found in the directory ***output/riscv-ba400_a113l2-aocpu/images***.
 
 ---
 ### Menuconfig ###

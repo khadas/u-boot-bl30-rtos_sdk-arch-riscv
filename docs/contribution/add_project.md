@@ -13,11 +13,11 @@ Then you can add your new project.The format of the message line need follow:
 
 	arch_dir_name soc_dir_name board_dir_name(chip_name+_+package_name) project_dir_name
 
-Let's take ARCH arm64, SOC a1, BOARD ad401_a113l, PRODUCT speaker for example.
+Let's take ARCH riscv, SOC a4, BOARD ba400_a113l2, PRODUCT aocpu for example.
 
 Please add the following line to ***boards/$ARCH/build_combination.in***.
 
-	arm64 a1 ad401_a113l speaker
+	riscv a4 ba400_a113l2 aocpu
 
 Q&A
 

@@ -1,26 +1,23 @@
 How to Add a New Architecture	{#add_arch}
 ==========
 
-Let's take ***arm64*** for example.
+Let's take ***riscv*** for example.
 
 ### Step 1: Prepare your source code. ###
-Make directory ***arch/arm64***, and put your source code into it.
+Make directory ***arch/riscv***, and put your source code into it.
 
-	mkdir -p arch/arm64
+	mkdir -p arch/riscv
 
 ### Step 2: Add ***Kconfig***. ###
-Write ***Kconfig*** and put it into ***arch/arm64***.
+Write ***Kconfig*** and put it into ***arch/riscv***.
 
 @code
-config ARM64
-	bool "ARM64"
+config RISCV
+	bool
 	select KERNEL
 	help
-	  ARM64 architecture
+	  RISC-V architecture
 ...
-if ARM64
-...
-endif # ARM64
 @endcode
 
 Please change the content accordingly.
@@ -31,18 +28,13 @@ source "arch/${ARCH}/Kconfig"
 @endcode
 
 ### Step 3: Add ***CMakeLists.txt***. ###
-Write ***CMakeLists.txt*** and put it into ***arch/arm64***.
+Write ***CMakeLists.txt*** and put it into ***arch/riscv***.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
 aml_add_library()
 
 aml_library_include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 aml_library_sources(
@@ -62,42 +54,52 @@ add_subdirectory(arch/${ARCH})
 @endcode
 
 ### Step 4: Add ***compiler.cmake***. ###
-Write ***compiler.cmake*** and put it into ***arch/arm64***.
+Write ***compiler_options.cmake*** and put it into ***arch/riscv***.
 
 @code
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -MD -g -ffunction-sections -fdata-sections -march=armv8-a")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --specs=nosys.specs")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -MD -g -ffunction-sections -fdata-sections -march=armv8-a")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --specs=nosys.specs")
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -O2 -MD -g -ffunction-sections -fdata-sections -march=armv8-a -D__ASM")
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} --specs=nosys.specs")
+set(common_flags "")
+set(c_flags "")
+
+set(linker_flags "-Wl,--print-memory-usage,-Map=${TARGET_NAME}.map,--gc-sections")
+
+if(CONFIG_LTO_OPTIMIZATION)
+set(LTO_OPTIONS "-flto -ffat-lto-objects")
+endif()
+
+if(CONFIG_LIBC_STD)
+set(linker_flags "${linker_flags},--wrap=_malloc_r,--wrap=_free_r,--wrap=_realloc_r,--wrap=_calloc_r")
+endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -g -ffunction-sections -fdata-sections -fno-common -fgnu89-inline -march=rv32imc -mabi=ilp32 ${LTO_OPTIONS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --specs=nano.specs --specs=nosys.specs")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -g -ffunction-sections -fdata-sections -fno-common -fgnu89-inline -march=rv32imc -mabi=ilp32 ${LTO_OPTIONS} -nostdlib")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --specs=nano.specs --specs=nosys.specs")
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -O2 -g -ffunction-sections -fdata-sections -fno-common -fgnu89-inline -march=rv32imc -mabi=ilp32 ${LTO_OPTIONS} -D__ASM")
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} --specs=nano.specs --specs=nosys.specs")
+
 @endcode
 Please change the compiler options accordingly.
 
 ### Step 5: Add ***cross toolchain***. ###
-Make directory ***arch/arm64/toolchain***, and put your cross toolchain into it.
+Make directory ***arch/riscv/toolchain***, and put your cross toolchain into it.
 
-	mkdir -p arch/arm64/toolchain
+	mkdir -p arch/riscv/toolchain
 
 Note that the cross toolchain must be a **tar.xz** file.
 
-Write ***arm64-gcc.cmake***, and put it into ***build_system/cmake/toolchains***.
+Write ***riscv_compiler.cmake***, and put it into ***build_system/cmake/toolchains***.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
 include("${CMAKE_CURRENT_LIST_DIR}/find_compiler.cmake")
 
 set(CMAKE_SYSTEM_NAME Generic)
 
-# Find GCC for ARM.
-aml_find_compiler(COMPILER_CC aarch64-none-elf-gcc)
-aml_find_compiler(COMPILER_CXX aarch64-none-elf-g++)
+# Find GCC for RISCV.
+aml_find_compiler(COMPILER_CC riscv-none-embed-gcc)
+aml_find_compiler(COMPILER_CXX riscv-none-embed-g++)
 set(COMPILER_ASM "${COMPILER_CC}" CACHE INTERNAL "")
-aml_find_compiler(COMPILER_OBJCOPY aarch64-none-elf-objcopy)
-aml_find_compiler(COMPILER_OBJDUMP aarch64-none-elf-objdump)
+aml_find_compiler(COMPILER_OBJCOPY riscv-none-embed-objcopy)
+aml_find_compiler(COMPILER_OBJDUMP riscv-none-embed-objdump)
 
 # Specify the cross compiler.
 set(CMAKE_C_COMPILER ${COMPILER_CC} CACHE FILEPATH "C compiler")

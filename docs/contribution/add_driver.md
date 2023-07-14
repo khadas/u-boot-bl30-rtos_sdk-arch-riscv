@@ -1,77 +1,79 @@
 How to Add a New Driver	{#add_driver}
 ==========
 
-Let's take ***watchdog*** driver for example.
+Let's take ***uart*** driver for example.
 
 ### Step 1: Prepare your source code. ###
-Make directory ***drivers/watchdog***, and put your source code into it.
+Make directory ***drivers_aocpu/uart***, and put your source code into it.
 
-	mkdir -p drivers/watchdog
+	mkdir -p drivers_aocpu/uart
 
 ### Step 2: Add ***Kconfig***. ###
 Write ***Kconfig*** for your driver.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
+config UART
+	bool "UART Driver"
 
-# SPDX-License-Identifier: MIT
+if UART
+config UART_WAKEUP
+	bool "UART Wake up Function"
+	help
+	    help select uart wake up function setting.
 
-config WATCHDOG
-	bool "Watchdog driver"
+endif # UART
 @endcode
 
-Then add the following line to ***drivers/Kconfig***.
+Then add the following line to ***drivers_aocpu/Kconfig***.
 @code
-rsource "watchdog/Kconfig"
+rsource "uart/Kconfig"
 @endcode
 
 ### Step 3: Add ***CMakeLists.txt***. ###
 Write ***CMakeLists.txt*** for your driver.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
 aml_library_include_directories(
 	${CMAKE_CURRENT_LIST_DIR}
 )
 
 aml_library_sources_ifdef(
-	CONFIG_WATCHDOG
-	watchdog.c
+	CONFIG_UART
+	uart.c
 )
 @endcode
 
-Then add the following line to root ***CMakeLists.txt***.
+Then add the following line to ***drivers_aocpu/CMakeLists.txt***.
 @code
-add_subdirectory(watchdog)
+...
+add_subdirectory_if_kconfig(uart)
+...
+
+aml_library_include_directories(
+	...
+	${SDK_BASE}/drivers_aocpu/uart
+)
 @endcode
 
 ### Step 4: Enable the new driver by default. ###
-Let's take ***boards/arm64/ad401_a113l*** for example.
+Let's take ***boards/riscv/ba400_a113l2*** for example.
 
-Add the following line to ***boards/arm64/ad401_a113l/defconfig***.
+Add the following line to ***boards/riscv/ba400_a113l2/defconfig***.
 
 @code
-CONFIG_WATCHDOG=y
+CONFIG_UART=y
 @endcode
 
 ### Step 5: Initialize your driver ###
-Add driver startup with ***DRIVER_INIT***
+Add driver startup code to ***boards/riscv/ba400_a113l2/hw_business.c***
 
 ```c
-#ifdef CONFIG_ARM64
-#include "initcall.h"
-#endif
 
-void watch_dog_init(void)
+void hw_business_process(void)
 {
-	vWatchdogInit(10000);
-	vWatchdogEnable();
+	...
+	uart_init();
+	...
 }
 
-#ifdef CONFIG_ARM64
-DRIVER_INIT(watch_dog_init);
-#endif
 ```

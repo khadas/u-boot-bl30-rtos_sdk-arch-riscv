@@ -1,39 +1,32 @@
 How to Add a New Board	{#add_board}
 ==========
 
-Let's take ***ad401_a113l*** for example.
+Let's take ***ba400_a113l2*** for example.
 
 ### Step 1: Prepare your source code. ###
-Make directory ***boards/arm64/ad401_a113l***, and put your source code into it.
+Make directory ***boards/riscv/ba400_a113l2***, and put your source code into it.
 
-	mkdir -p boards/arm64/ad401_a113l
+	mkdir -p boards/riscv/ba400_a113l2
 
 ### Step 2: Add ***Kconfig***. ###
-Write ***Kconfig*** and put it into ***boards/arm64/ad401_a113l***.
+Write ***Kconfig*** and put it into ***boards/riscv/ba400_a113l2***.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
-config BOARD_AD401_A113L
-	bool "Amlogic AD401 Board"
-	select SOC_A1
+config BOARD_BA400_A113L2
+	bool "Amlogic BA400 Board"
+	select SOC_A4
+	...
 	help
-	  Enable Amlogic AD401 Board.
+	  Enable Amlogic BA400 Board.
 ...
 @endcode
 
 Please change the content accordingly.
 
 ### Step 3: Add ***CMakeLists.txt***. ###
-Write ***CMakeLists.txt*** and put it into ***boards/arm64/ad401_a113l***.
+Write ***CMakeLists.txt*** and put it into ***boards/riscv/ba400_a113l2***.
 
 @code
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-
-# SPDX-License-Identifier: MIT
-
 aml_library_include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -46,18 +39,10 @@ aml_library_sources(
 Please change the include directories, source code and dependent libraries accordingly.
 
 ### Step 4: Add ***defconfig***. ###
-Write ***defconfig*** and put it into ***boards/arm64/ad401_a113l***.
+Write ***defconfig*** and put it into ***boards/riscv/ba400_a113l2***.
 
 @code
-#
-# Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
-#
-# SPDX-License-Identifier: MIT
-#
-
-CONFIG_BOARD_AD401_A113L=y
-...
-CONFIG_SERIAL=y
+CONFIG_BOARD_BA400_A113L2=y
 ...
 @endcode
 
