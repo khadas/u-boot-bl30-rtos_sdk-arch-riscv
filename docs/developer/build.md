@@ -38,6 +38,6 @@ To adjust the default configuration, please use menuconfig.
 
 ### Build Document ###
 
-	make docs
+	make docs DOCS_ARCH=riscv
 
-To view the local document, please open ***output/docs/html/index.html*** with any web browser.
+To view the local document, please open ***output/docs/riscv/html/index.html*** with any web browser.

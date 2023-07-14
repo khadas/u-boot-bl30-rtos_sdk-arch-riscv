@@ -6,7 +6,7 @@ Let's take ***aocpu*** for example.
 ### Step 1: Prepare your source code. ###
 Make directory ***products/aocpu***, and put your **main.c** into it.
 
-	mkdir -p products/speaker
+	mkdir -p products/aocpu
 
 ### Step 2: Add ***CMakeLists.txt***. ###
 Write ***CMakeLists.txt*** and put it into ***products/aocpu***.

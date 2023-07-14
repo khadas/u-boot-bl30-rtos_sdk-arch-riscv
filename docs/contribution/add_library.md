@@ -64,35 +64,10 @@ add_subdirectory(libs/ulog)
 @endcode
 
 ### Step 4: Enable the new libs by default. ###
-Let's take ***products/speaker*** for example.
+Let's take ***products/aocpu*** for example.
 
-Add the following line to ***products/speaker/prj.conf***.
+Add the following line to ***products/aocpu/prj.conf***.
 
 @code
 CONFIG_ULOG=y
 @endcode
-
-### Step 5: Initialize the ulog. ###
-Add service startup with ***SERVICE_INIT***
-
-```c
-#ifdef CONFIG_ARM64
-#include "initcall.h"
-#endif
-
-void ulog_console_backend_init(void)
-{
-    ulog_init();
-    console.output = ulog_console_backend_output;
-
-    ulog_backend_register(&console, "console", RT_TRUE);
-
-    console_uart = iot_uart_open(0);
-
-}
-#ifdef CONFIG_ARM64
-SERVICE_INIT(ulog_console_backend_init);
-#endif
-...
-}
-```
