@@ -10,8 +10,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <stdint.h>
 #include <errno.h>
+#include <stdint.h>
 
 /* Macros to access registers */
 #define REG32_ADDR(addr) ((volatile uint32_t *)(uintptr_t)(addr))
@@ -23,12 +23,12 @@ extern "C" {
 #define REG8(addr) (*REG8_ADDR(addr))
 
 #define BIT(nr) (1UL << (nr))
-#define REG32_UPDATE_BITS(addr, mask, val)                                                         \
-	do {                                                                                       \
-		uint32_t _v = REG32((unsigned long)addr);                                          \
-		_v &= (~(mask));                                                                   \
-		_v |= ((val) & (mask));                                                            \
-		REG32((unsigned long)addr) = _v;                                                   \
+#define REG32_UPDATE_BITS(addr, mask, val)                \
+	do {                                              \
+		uint32_t _v = REG32((unsigned long)addr); \
+		_v &= (~(mask));                          \
+		_v |= ((val) & (mask));                   \
+		REG32((unsigned long)addr) = _v;          \
 	} while (0)
 
 static inline int generic_ffs(int x)
@@ -75,11 +75,11 @@ static inline int generic_ffs(int x)
 #define GENMASK(h, l) (((~0UL) << (l)) & (~0UL >> (BITS_PER_LONG - 1 - (h))))
 #define IS_ALIGNED(x, a) (((unsigned long)(x) & ((unsigned long)(a)-1)) == 0)
 #define _RET_IP_ ((unsigned long)__builtin_return_address(0))
-#define _THIS_IP_                                                                                  \
-	({                                                                                         \
-		__label__ __here;                                                                  \
-__here:                                                                                    \
-		(unsigned long)&&__here;                                                           \
+#define _THIS_IP_                        \
+	({                               \
+		__label__ __here;        \
+__here:                          \
+		(unsigned long)&&__here; \
 	})
 #define __round_mask(x, y) ((__typeof__(x))((y)-1))
 #define round_up(x, y) ((((x)-1) | __round_mask(x, y)) + 1)
@@ -93,6 +93,16 @@ typedef int64_t s64;
 typedef int32_t s32;
 typedef int16_t s16;
 typedef int8_t s8;
+
+/*
+ * This struct define the way the registers are
+ * stored on the stack during an exception
+ */
+struct pt_regs {
+	uint32_t regs[32]; /* include zero reg */
+	uint32_t mstatus;  /* machine status register */
+	uint32_t mepc;	   /* machine exception program counter */
+};
 
 #ifndef BIT
 #define BIT(x) (1 << (x))

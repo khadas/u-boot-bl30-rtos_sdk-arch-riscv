@@ -15,5 +15,8 @@ aml_library_sources(
 )
 
 aml_library_link_libraries(kernel__${KERNEL})
+if(CONFIG_DEBUG_COREDUMP)
+aml_library_link_libraries(utilities__coredump)
+endif()
 
 aml_link_libraries()

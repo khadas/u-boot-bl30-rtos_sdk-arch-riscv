@@ -46,7 +46,9 @@
 #include "n200_timer.h"
 #include <riscv_bits.h>
 #include "common.h"
-
+#ifdef CONFIG_DEBUG_COREDUMP
+#include "coredump.h"
+#endif
 
 /* Standard Includes */
 #include <stdlib.h>
@@ -169,6 +171,11 @@ unsigned long ulSynchTrap(unsigned long mcause, unsigned long sp, unsigned long 
 				       *(unsigned *)((read_csr(mepc)/4) *4 + (i + 1) * REGBYTES -16));
 			printf("Dump Stack: \n");
 			vTaskDumpStack(NULL);
+#ifdef CONFIG_DEBUG_COREDUMP
+			*(uint32_t *)(sp + 32 * REGBYTES) = read_csr(mstatus);
+			*(uint32_t *)(sp + 33 * REGBYTES) = read_csr(mepc);
+			coredump(0, (void *)sp);
+#endif
 			//_exit(mcause);
 			do {}while(1);
 	}
