@@ -8,6 +8,11 @@ Content:
 - @subpage build
 - @subpage shell_functions
 - @subpage aocpu_wakeup_flow
+- @subpage aocpu_access_limitation_t5w
+- @subpage aocpu_access_limitation_a5
 - @subpage aocpu_access_limitation_s5
 - @subpage aocpu_access_limitation_t5m
+- @subpage aocpu_access_limitation_a4
 - @subpage aocpu_access_limitation_t3x
+- @subpage aocpu_access_limitation_txhd2
+- @subpage aocpu_access_limitation_s1a
