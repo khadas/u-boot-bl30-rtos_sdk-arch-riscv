@@ -15,4 +15,9 @@ config VERSION_FULL_INFO
 	help
 	  Select print full version information.
 
+config AOCPU_ALIVE_DETECTION
+	bool "AOCPU alive detection mechanism"
+	help
+	  Record AOCPU tickcount to register.
+
 endmenu

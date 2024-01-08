@@ -299,7 +299,12 @@ void prvTaskExitError( void )
 }
 /*-----------------------------------------------------------*/
 
-
+#ifdef CONFIG_AOCPU_ALIVE_DETECTION
+static void vAOCPUAliveSet(void)
+{
+	AOCPU_ALIVE_REG_VAL_WR = xTaskGetTickCount();
+}
+#endif
 
 /*Entry Point for Machine Timer Interrupt Handler*/
 //Bob: add the function argument int_num
@@ -330,6 +335,11 @@ void vPortSysTickHandler(void)
 		//portYIELD();
 		vTaskSwitchContext();
 	}
+
+#ifdef CONFIG_AOCPU_ALIVE_DETECTION
+	vAOCPUAliveSet();
+#endif
+
 #ifdef CONFIG_N200_REVA
 	pic_enable_interrupt(PIC_INT_TMR);
 	return int_num;
@@ -347,6 +357,10 @@ void vPortSysTickHandler_soc(void)
 	{
 		vTaskSwitchContext();
 	}
+
+#ifdef CONFIG_AOCPU_ALIVE_DETECTION
+	vAOCPUAliveSet();
+#endif
 }
 
 void vPortSetupTimer(void)
