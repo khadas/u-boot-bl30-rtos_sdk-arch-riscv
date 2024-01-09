@@ -16,3 +16,4 @@ Content:
 - @subpage aocpu_access_limitation_t3x
 - @subpage aocpu_access_limitation_txhd2
 - @subpage aocpu_access_limitation_s1a
+- @subpage aocpu_access_limitation_s7
