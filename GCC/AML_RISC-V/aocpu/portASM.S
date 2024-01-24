@@ -25,6 +25,12 @@
  * 1 tab == 4 spaces!
  */
 
+/*
+ * Copyright (c) 2021-2022 Amlogic, Inc. All rights reserved.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "soc.h"
 #include "riscv_encoding.h"
 #include "n200_timer.h"

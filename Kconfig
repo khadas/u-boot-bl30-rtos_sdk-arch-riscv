@@ -20,4 +20,9 @@ config AOCPU_ALIVE_DETECTION
 	help
 	  Record AOCPU tickcount to register.
 
+config RISCV_WCN
+	bool "RISCV for WCN"
+	help
+	  RISCV for WCN.
+
 endmenu
