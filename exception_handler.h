@@ -52,10 +52,6 @@
 #define RV_PIC_LVL_HIQ1 2
 #define RV_PIC_LVL_TSIQ 1
 
-uint32_t handle_exception(uint32_t mcause, uint32_t sp);
-
-uint32_t handle_nmi(uint32_t mcause, uint32_t sp);
-
 uint32_t interrupt_register_exception(uint32_t mcause, uint32_t sp);
 
 uint32_t interrupt_register_nmi(uint32_t mcause, uint32_t sp);

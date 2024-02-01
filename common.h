@@ -119,9 +119,15 @@ typedef int8_t s8;
  * stored on the stack during an exception
  */
 struct pt_regs {
+#ifdef CONFIG_RISCV_WCN
+	uint32_t mepc;
+	uint32_t ra; //x1
+	uint32_t regs[27]; /* x5-x31 */
+#else
 	uint32_t regs[32]; /* include zero reg */
 	uint32_t mstatus;  /* machine status register */
 	uint32_t mepc;	   /* machine exception program counter */
+#endif
 };
 
 #define UNUSED_PARAM(X)     ((void)X)

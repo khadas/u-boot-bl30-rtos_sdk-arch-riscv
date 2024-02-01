@@ -8,6 +8,7 @@
 #define ENTRY_S
 
 #include "riscv_encoding.h"
+#include "portContext.h"
 
 #if __riscv_xlen == 64
 #define SLL32 sllw
@@ -46,99 +47,6 @@
 
 ###############################################
 ###############################################
-#only save caller registers
-.macro SAVE_CONTEXT
-  STORE x1,  0*REGBYTES(sp)
-  STORE x5,  1*REGBYTES(sp)
-  STORE x6,  2*REGBYTES(sp)
-  STORE x7,  3*REGBYTES(sp)
-  STORE x10, 4*REGBYTES(sp)
-  STORE x11, 5*REGBYTES(sp)
-  STORE x12, 6*REGBYTES(sp)
-  STORE x13, 7*REGBYTES(sp)
-  STORE x14, 8*REGBYTES(sp)
-  STORE x15, 9*REGBYTES(sp)
-  STORE x16, 10*REGBYTES(sp)
-  STORE x17, 11*REGBYTES(sp)
-  STORE x28, 12*REGBYTES(sp)
-  STORE x29, 13*REGBYTES(sp)
-  STORE x30, 14*REGBYTES(sp)
-  STORE x31, 15*REGBYTES(sp)
-.endm
-###############################################
-###############################################
-#restore caller registers
-.macro RESTORE_CONTEXT
-  LOAD x1,  0*REGBYTES(sp)
-  LOAD x5,  1*REGBYTES(sp)
-  LOAD x6,  2*REGBYTES(sp)
-  LOAD x7,  3*REGBYTES(sp)
-  LOAD x10, 4*REGBYTES(sp)
-  LOAD x11, 5*REGBYTES(sp)
-  LOAD x12, 6*REGBYTES(sp)
-  LOAD x13, 7*REGBYTES(sp)
-  LOAD x14, 8*REGBYTES(sp)
-  LOAD x15, 9*REGBYTES(sp)
-  LOAD x16, 10*REGBYTES(sp)
-  LOAD x17, 11*REGBYTES(sp)
-  LOAD x28, 12*REGBYTES(sp)
-  LOAD x29, 13*REGBYTES(sp)
-  LOAD x30, 14*REGBYTES(sp)
-  LOAD x31, 15*REGBYTES(sp)
-.endm
-###############################################
-###############################################
-#restore caller registers
-.macro RESTORE_CONTEXT_EXCEPT_X5
-  LOAD x1,  0*REGBYTES(sp)
-  LOAD x6,  2*REGBYTES(sp)
-  LOAD x7,  3*REGBYTES(sp)
-  LOAD x10, 4*REGBYTES(sp)
-  LOAD x11, 5*REGBYTES(sp)
-  LOAD x12, 6*REGBYTES(sp)
-  LOAD x13, 7*REGBYTES(sp)
-  LOAD x14, 8*REGBYTES(sp)
-  LOAD x15, 9*REGBYTES(sp)
-  LOAD x16, 10*REGBYTES(sp)
-  LOAD x17, 11*REGBYTES(sp)
-  LOAD x28, 12*REGBYTES(sp)
-  LOAD x29, 13*REGBYTES(sp)
-  LOAD x30, 14*REGBYTES(sp)
-  LOAD x31, 15*REGBYTES(sp)
-.endm
-###############################################
-###############################################
-#restore caller registers
-.macro RESTORE_CONTEXT_ONLY_X5
-  LOAD x5,  1*REGBYTES(sp)
-.endm
-###############################################
-###############################################
-# Save the mepc and mstatus
-#
-.macro SAVE_MEPC_MSTATUS
-  csrr x5, CSR_MEPC  
-  STORE x5,  16*REGBYTES(sp)
-  csrr x5, CSR_MSTATUS  
-  STORE x5,  17*REGBYTES(sp)
-  csrr x5, CSR_MSUBM
-  STORE x5,  18*REGBYTES(sp)
-.endm
-
-###############################################
-###############################################
-# Restore the mepc and mstatus
-#
-.macro RESTORE_MEPC_MSTATUS
-  LOAD x5,  16*REGBYTES(sp)
-  csrw CSR_MEPC, x5  
-  LOAD x5,  17*REGBYTES(sp)
-  csrw CSR_MSTATUS, x5  
-  LOAD x5,  18*REGBYTES(sp)
-  csrw CSR_MSUBM, x5
-.endm
-###############################################
-###############################################
 # Disable Interrupt
 #
 .macro DISABLE_MIE
@@ -153,27 +61,32 @@
 .endm
 ###############################################
 ###############################################
+# save exception context
+.macro CONTEXT_SAVE_EXCEPTION_CONTEXT
+    portcontextSAVE_CONTEXT_INTERNAL
+    csrr a0, mcause
+    csrr a1, mepc
+    addi a1, a1, 4                      /* Synchronous so update exception return address to the instruction after the instruction that generated the exception. */
+    store_x a1, 0( sp )                 /* Save updated exception return address. */
+    mv a1, sp
+    load_x sp, xISRStackTop             /* Switch to ISR stack. */
+.endm
+###############################################
+###############################################
+# restore exception context
+.macro CONTEXT_RESTORE_CONTEXT
+  portcontextRESTORE_CONTEXT
+.endm
+###############################################
+###############################################
 
   .align 6
   .global exception_entry
 exception_entry:
-  addi sp, sp, -19*REGBYTES  // allocate stack
-
-  // saving registers
-  SAVE_CONTEXT
-  // saving mepc/mstatus
-  SAVE_MEPC_MSTATUS
-
-  csrr a0, mcause
-  mv a1, sp
+  CONTEXT_SAVE_EXCEPTION_CONTEXT
   call interrupt_register_exception
-  
-  // restore mepc/mstatus registers
-  RESTORE_MEPC_MSTATUS
-  // restore registers
-  RESTORE_CONTEXT
-  
-  addi sp, sp, 19*REGBYTES  // get back stack
+  CONTEXT_RESTORE_CONTEXT
+
   mret
 
 ###############################################
@@ -182,22 +95,10 @@ exception_entry:
   .align 2
   .global nmi_entry
 nmi_entry:
-  addi sp, sp, -19*REGBYTES  // allocate stack
-
-  // saving registers
-  SAVE_CONTEXT
-  // saving mepc/mstatus
-  SAVE_MEPC_MSTATUS
-  
-  csrr a0, mcause
+  portcontextSAVE_INTERRUPT_CONTEXT
   call interrupt_register_nmi
-  
-  // restore mepc/mstatus registers
-  RESTORE_MEPC_MSTATUS
-  // restore registers
-  RESTORE_CONTEXT
-  
-  addi sp, sp, 19*REGBYTES  // get back stack
+  portcontextRESTORE_CONTEXT
+
   mret
 
 ###############################################
@@ -206,14 +107,7 @@ nmi_entry:
   .align 2
   .global int_entry
 int_entry:
-  addi sp, sp, -19*REGBYTES  // allocate stack
-
-  // saving registers
-  SAVE_CONTEXT
-  // store mcause/mepc/msubm to stack
-  csrrwi  x0, CSR_PUSHMCAUSE, 16
-  csrrwi  x0, CSR_PUSHMEPC, 17
-  csrrwi  x0, CSR_PUSHMSUBM, 18
+  portcontextSAVE_INTERRUPT_CONTEXT
 
 service_loop:
   // Claim the CLIC to find its pending highest ID
@@ -221,22 +115,11 @@ service_loop:
   // and update the link register
   csrrw ra, CSR_JALMNXTI, ra
 
-  RESTORE_CONTEXT_EXCEPT_X5
-
   #---- Critical section with interrupts disabled -----------------------
   DISABLE_MIE # Disable interrupts
 
-  LOAD x5,  18*REGBYTES(sp)
-  csrw CSR_MSUBM, x5
-  LOAD x5,  17*REGBYTES(sp)
-  csrw CSR_MEPC, x5
-  LOAD x5,  16*REGBYTES(sp)
-  csrw CSR_MCAUSE, x5
+  portcontextRESTORE_CONTEXT
 
-  RESTORE_CONTEXT_ONLY_X5
-
-  // De-allocate the stack space
-  addi sp, sp, 19*REGBYTES
   // Return to regular code
   mret
   
