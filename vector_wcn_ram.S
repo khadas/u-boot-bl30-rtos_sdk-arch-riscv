@@ -4,84 +4,66 @@
  * SPDX-License-Identifier: MIT
  */
 
-    .section .ram.vector
-    .extern  eclic_msip_handler
-    .extern  eclic_mtip_handler
-    .extern  interrupt_register_u2d
-    .extern  interrupt_register_usb_iddig
-    .extern  interrupt_register_usb_vbusdig
-    .extern  interrupt_register_irq
-    .extern  interrupt_register_fiq
-    .extern  interrupt_register_fmac
-    .extern  interrupt_register_tshi
+.section .ram.vector
+#include "irq_handler.h"
 
-    .extern  interrupt_register_imac
-    .extern  interrupt_register_h2fw
-    .extern  interrupt_register_coxt
-    .extern  interrupt_register_wake
-    .extern  interrupt_register_hiq0
-    .extern  interrupt_register_hiq1
-    .extern  interrupt_register_tsiq
-    .extern  interrupt_register_wdiq
-    .global vector_ram_base
-
+.global vector_ram_base
 vector_ram_base:
-    .word  0
-    .word  0
-    .word  0
-    .word  eclic_msip_handler//3
+    .word  irq0_handler
+    .word  irq1_handler
+    .word  irq2_handler
+    .word  irq3_handler
+    .word  irq4_handler
+    .word  irq5_handler
+    .word  irq6_handler
+    .word  irq7_handler
+    .word  irq8_handler
+    .word  irq9_handler
 
-    .word  0
-    .word  0
-    .word  0
-    .word  eclic_mtip_handler//7
+    .word  irq10_handler
+    .word  irq11_handler
+    .word  irq12_handler
+    .word  irq13_handler
+    .word  irq14_handler
+    .word  irq15_handler
+    .word  irq16_handler
+    .word  irq17_handler
+    .word  irq18_handler
+    .word  irq19_handler
 
-    .word  0
-    .word  0
-    .word  0
-    .word  0
+    .word  irq20_handler
+    .word  irq21_handler
+    .word  irq22_handler
+    .word  irq23_handler
+    .word  irq24_handler
+    .word  irq25_handler
+    .word  irq26_handler
+    .word  irq27_handler
+    .word  irq28_handler
+    .word  irq29_handler
 
-    .word  0
-    .word  0
-    .word  0
-    .word  0
+    .word  irq30_handler
+    .word  irq31_handler
+    .word  irq32_handler
+    .word  irq33_handler
+    .word  irq34_handler
+    .word  irq35_handler
+    .word  irq36_handler
+    .word  irq37_handler
+    .word  irq38_handler
+    .word  irq39_handler
 
-    .word  0
-    .word  0
-    .word  0
+    .word  irq40_handler
+    .word  irq41_handler
+    .word  irq42_handler
+    .word  irq43_handler
+    .word  irq44_handler
+    .word  irq45_handler
+    .word  irq46_handler
+    .word  irq47_handler
+    .word  irq48_handler
+    .word  irq49_handler
 
-    .word  interrupt_register_fiq //19
-    .word  interrupt_register_irq //20
-    .word  interrupt_register_fmac //21
-    .word  interrupt_register_tshi //22
-    .word  0
-    .word  0
-    .word  0
-    .word  0
+    .word  irq50_handler
+    .word  irq51_handler
 
-    .word  interrupt_register_imac //27
-    .word  interrupt_register_h2fw
-    .word  interrupt_register_coxt
-    .word  interrupt_register_wake
-    .word  interrupt_register_hiq0
-    .word  interrupt_register_hiq1
-    .word  interrupt_register_tsiq
-    .word  interrupt_register_wdiq
-
-    .word  interrupt_register_u2d
-    .word  interrupt_register_usb_iddig
-    .word  interrupt_register_usb_vbusdig
-    .word  0
-    .word  0
-    .word  0
-    .word  0
-    .word  0
-
-    .word  0
-    .word  0
-    .word  0
-    .word  0
-    .word  0
-    .word  0
-    .word  0
-    .word  0 //51

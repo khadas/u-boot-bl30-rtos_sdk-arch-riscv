@@ -124,14 +124,6 @@ struct pt_regs {
 	uint32_t mepc;	   /* machine exception program counter */
 };
 
-#ifdef __ASSEMBLER__
-#define _AC(X, Y) X
-#define _AT(T, X) X
-#else
-#define _AC(X, Y) (X##Y)
-#define _AT(T, X) ((T)(X))
-#endif
-
 #define UNUSED_PARAM(X)     ((void)X)
 
 #ifdef __cplusplus
